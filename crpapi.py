@@ -39,6 +39,7 @@ class CRP(object):
 
         url = 'http://api.opensecrets.org/?method=%s&output=json&apikey=%s&%s' % \
               (func, CRP.apikey, urllib.urlencode(params))
+        
         try:
             response = urllib2.urlopen(url).read()
             return json.loads(response)['response']
@@ -46,6 +47,18 @@ class CRP(object):
             raise CRPApiError(e.read())
         except (ValueError, KeyError), e:
             raise CRPApiError('Invalid Response')
+
+    class getLegislators(object):
+        @staticmethod
+        def get(**kwargs):
+            results = CRP._apicall('getLegislators', kwargs)['legislator']
+            return results
+
+    class memPFDprofile(object):
+        @staticmethod
+        def get(**kwargs):
+            results = CRP._apicall('memPFDprofile', kwargs)['member_profile']
+            return results
 
     class candSummary(object):
         @staticmethod
@@ -77,8 +90,20 @@ class CRP(object):
             result = CRP._apicall('CandIndByInd', kwargs)['candIndus']
             return result['@attributes']
 
-    class memTravelTrips(object):
+    class getOrgs(object):
         @staticmethod
         def get(**kwargs):
-            results = CRP._apicall('memTravelTrips', kwargs)['trips']['trip']
+            results = CRP._apicall('getOrgs', kwargs)['organization']
+            return results
+            
+    class orgSummary(object):
+        @staticmethod
+        def get(**kwargs):
+            results = CRP._apicall('orgSummary', kwargs)['organization']
+            return results
+            
+    class congCmteIndus(object):
+        @staticmethod
+        def get(**kwargs):
+            results = CRP._apicall('congCmteIndus', kwargs)['committee']['member']
             return results
